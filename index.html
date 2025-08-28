@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visa News</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f4f6f9;
+    }
+
+    #news-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      /* ✅ Always 2 columns */
+      gap: 20px;
+      padding: 20px;
+    }
+
+    #news-container>div {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    #news-container>div:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: #2c3e50;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: #34495e;
+    }
+
+    p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    ul {
+      margin: 5px 0;
+      padding-left: 20px;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h1>Visa & Immigration News</h1>
+  <div id="news-container"></div>
+
+  <script>
+    async function fetchNews() {
+      try {
+        const res = await fetch("https://visa-news.onrender.com/admin-api/newsData/newsData");
+        const data = await res.json();
+        const container = document.getElementById("news-container");
+
+        if (data && data.news && data.news.length > 0) {
+          data.news.forEach(news => {
+            const div = document.createElement("div");
+            div.classList.add("news-card");
+            div.innerHTML = `
+              <h2>${news.country_name}</h2>
+              <h3>${news.headline}</h3>
+              <p class="date"><strong>Date:</strong> ${news.date}</p>
+              <ul>
+                ${news.content.map(c => `<li>${c}</li>`).join("")}
+              </ul>
+              <p><strong>Sources:</strong></p>
+              <ul>
+                ${news.source_links.map(link => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")}
+              </ul>
+            `;
+            container.appendChild(div);
+          });
+        } else {
+          container.innerHTML = "<p>No news found</p>";
+        }
+
+      } catch (error) {
+        console.error("Error fetching news:", error);
+        document.getElementById("news-container").innerHTML = "<p>Error loading news.</p>";
+      }
+    }
+
+    fetchNews();
+  </script>
+</body>
+
+</html>
