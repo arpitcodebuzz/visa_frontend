@@ -85,6 +85,7 @@
               <h2>${news.country_name}</h2>
               <h3>${news.headline}</h3>
               <p class="date"><strong>Date:</strong> ${news.date}</p>
+              <p class="date"><strong>Date:</strong> ${news.time_uploaded}</p>
               <ul>
                 ${news.content.map(c => `<li>${c}</li>`).join("")}
               </ul>
